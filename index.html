@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>АвтоЛікар24.7</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      header {
+        display: flex;
+        justify-content: flex-end;
+        padding: 10px;
+        background-color: #333;
+      }
+
+      button {
+        padding: 10px 20px;
+        border: none;
+        background-color: #f8b400;
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+        border-radius: 5px;
+        margin-left: 10px; /* Додаємо відступ між кнопками */
+      }
+
+      button:hover {
+        background-color: #d48c00;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <button id="profileBtn">Профіль</button>
+      <button id="registerBtn">Реєстрація та Авторизація</button>
+    </header>
+
+    <script>
+      document
+        .getElementById("profileBtn")
+        .addEventListener("click", function () {
+          window.location.href = "profile.html";
+        });
+
+      document
+        .getElementById("registerBtn")
+        .addEventListener("click", function () {
+          window.location.href = "auth.html"; // Замінив на правильний шлях
+        });
+    </script>
+  </body>
+</html>
