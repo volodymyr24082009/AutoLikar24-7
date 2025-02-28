@@ -1,780 +1,944 @@
 <!DOCTYPE html>
-<html lang="uk">
-  <head>
+<html lang="uk" class="dark">
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Мій профіль</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Мій профіль - АвтоЛікар24.7</title>
     <style>
-      html {
-        scroll-behavior: smooth;
-        height: 100%;
-      }
-
-      body {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        background: #1a1a1a;
-        background-image: radial-gradient(
-            rgba(255, 0, 0, 0.1) 1px,
-            transparent 1px
-          ),
-          radial-gradient(rgba(255, 0, 0, 0.1) 1px, transparent 1px);
-        background-size: 50px 50px;
-        background-position: 0 0, 25px 25px;
-        padding: 0;
-        color: #fff;
-        position: relative;
-        overflow-x: hidden;
-        margin: 0;
-        font-family: Arial, sans-serif;
-      }
-
-      body::before {
-        content: "";
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 5px;
-        background: linear-gradient(90deg, #ff0000, #ff8800, #ff0000);
-        animation: speedLine 3s linear infinite;
-        z-index: 10;
-      }
-
-      /* Scrollbar Styling */
-      ::-webkit-scrollbar {
-        width: 12px;
-      }
-
-      ::-webkit-scrollbar-track {
-        background: #2a2a2a;
-      }
-
-      ::-webkit-scrollbar-thumb {
-        background-color: #ff3300;
-        border-radius: 20px;
-        border: 3px solid #2a2a2a;
-      }
-
-      * {
-        scrollbar-width: thin;
-        scrollbar-color: #ff3300 #2a2a2a;
-      }
-
-      /* Header and Navigation */
-      header {
-        width: 100%;
-        background: rgba(34, 34, 34, 0.9);
-        backdrop-filter: blur(10px);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        position: sticky;
-        top: 0;
-        z-index: 100;
-      }
-
-      nav {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
-      }
-
-      nav ul {
-        display: flex;
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        height: 60px;
-      }
-
-      nav li {
-        margin: 0;
-        padding: 0;
-      }
-
-      nav a {
-        display: flex;
-        align-items: center;
-        height: 100%;
-        padding: 0 20px;
-        color: #fff;
-        text-decoration: none;
-        font-weight: 500;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        font-size: 0.9rem;
-        position: relative;
-        transition: all 0.3s ease;
-      }
-
-      nav a:hover {
-        color: #ff3300;
-      }
-
-      nav a::after {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        width: 0;
-        height: 3px;
-        background: #ff3300;
-        transition: all 0.3s ease;
-        transform: translateX(-50%);
-      }
-
-      nav a:hover::after {
-        width: 80%;
-      }
-
-      #logout {
-        margin-left: auto;
-        color: #ff3300;
-      }
-
-      #logout:hover {
-        color: #ff6600;
-      }
-
-      /* Main Content */
-      main {
-        flex: 1;
-        width: 100%;
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 40px 20px;
-        animation: fadeInUp 0.8s ease-out;
-      }
-
-      .profile-container {
-        background: linear-gradient(145deg, #222222, #333333);
-        border-radius: 12px;
-        padding: 2rem;
-        width: 100%;
-        max-width: 800px;
-        margin: 0 auto;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        border: 1px solid #444;
-        position: relative;
-        overflow: hidden;
-      }
-
-      .profile-container::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: repeating-linear-gradient(
-          45deg,
-          rgba(255, 255, 255, 0.03) 0px,
-          rgba(255, 255, 255, 0.03) 10px,
-          rgba(255, 255, 255, 0.06) 10px,
-          rgba(255, 255, 255, 0.06) 20px
-        );
-        pointer-events: none;
-      }
-
-      h1 {
-        font-size: 2rem;
-        margin-bottom: 2rem;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-        animation: fadeInDown 0.8s ease-out;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        color: #f8f8f8;
-        text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
-      }
-
-      h1::after {
-        content: "";
-        position: absolute;
-        bottom: -5px;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background: linear-gradient(90deg, transparent, #ff3300, transparent);
-        animation: scanLine 2s ease-out infinite;
-      }
-
-      /* Form Styling */
-      #profile-form {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1.5rem;
-        margin-top: 2rem;
-      }
-
-      #profile-form label {
-        display: block;
-        margin-bottom: 0.5rem;
-        font-size: 0.9rem;
-        font-weight: 500;
-        transition: all 0.3s ease;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: #ccc;
-      }
-
-      #profile-form input,
-      #profile-form textarea {
-        display: block;
-        width: 100%;
-        padding: 12px 16px;
-        background: rgba(0, 0, 0, 0.2);
-        border: 1px solid #444;
-        border-radius: 4px;
-        color: #fff;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-        box-sizing: border-box;
-      }
-
-      #profile-form textarea {
-        min-height: 100px;
-        resize: vertical;
-      }
-
-      #profile-form input:focus,
-      #profile-form textarea:focus {
-        outline: none;
-        border-color: #ff3300;
-        box-shadow: 0 0 0 3px rgba(255, 51, 0, 0.2);
-        transform: translateY(-2px);
-      }
-
-      #profile-form input::placeholder,
-      #profile-form textarea::placeholder {
-        color: rgba(255, 255, 255, 0.3);
-      }
-
-      /* Checkbox styling */
-      #profile-form input[type="checkbox"] {
-        width: auto;
-        display: inline-block;
-        margin-right: 10px;
-        cursor: pointer;
-      }
-
-      #services {
-        grid-column: span 2;
-        background: rgba(0, 0, 0, 0.2);
-        padding: 1.5rem;
-        border-radius: 8px;
-        border: 1px solid #444;
-        margin-top: 1rem;
-      }
-
-      #services > label {
-        margin-bottom: 1rem;
-        color: #ff3300;
-      }
-
-      #services div {
-        margin-bottom: 0.8rem;
-      }
-
-      #services input[type="checkbox"] + label {
-        display: inline;
-        text-transform: none;
-        letter-spacing: normal;
-        cursor: pointer;
-      }
-
-      /* Button styling */
-      button {
-        grid-column: span 2;
-        padding: 12px;
-        background: linear-gradient(90deg, #ff3300, #ff6600);
-        color: #fff;
-        border: none;
-        border-radius: 4px;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-top: 1rem;
-      }
-
-      button::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(255, 255, 255, 0.2),
-          transparent
-        );
-        transition: all 0.6s ease;
-      }
-
-      button:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-      }
-
-      button:hover::before {
-        left: 100%;
-      }
-
-      button:active {
-        transform: translateY(0);
-      }
-
-      /* Message styling */
-      #error-message,
-      #success-message {
-        grid-column: span 2;
-        padding: 10px;
-        margin-top: 1rem;
-        border-radius: 4px;
-        text-align: center;
-        font-weight: 500;
-      }
-
-      #error-message {
-        background: rgba(255, 0, 0, 0.1);
-        border: 1px solid rgba(255, 0, 0, 0.3);
-      }
-
-      #success-message {
-        background: rgba(0, 255, 0, 0.1);
-        border: 1px solid rgba(0, 255, 0, 0.3);
-      }
-
-      /* Footer */
-      footer {
-        width: 100%;
-        background: rgba(34, 34, 34, 0.9);
-        text-align: center;
-        padding: 20px;
-        margin-top: auto;
-        font-size: 0.9rem;
-        color: #888;
-      }
-
-      /* Animations */
-      @keyframes fadeInDown {
-        from {
-          opacity: 0;
-          transform: translateY(-20px);
+        :root {
+            --background-dark: #1a1a1a;
+            --background-light: #f5f5f5;
+            --text-dark: #fff;
+            --text-light: #333;
+            --primary-color: #ff3300;
+            --secondary-color: #ff6600;
+            --accent-color: #007bff;
         }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
 
-      @keyframes fadeInUp {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
+        html {
+            scroll-behavior: smooth;
+            height: 100%;
         }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
 
-      @keyframes scanLine {
-        0% {
-          transform: translateX(-100%);
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            background: var(--background-dark);
+            background-image: radial-gradient(rgba(255, 0, 0, 0.1) 1px, transparent 1px),
+                radial-gradient(rgba(255, 0, 0, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            background-position: 0 0, 25px 25px;
+            padding: 20px;
+            color: var(--text-dark);
+            font-family: 'Roboto', Arial, sans-serif;
+            transition: background 0.3s ease, color 0.3s ease;
+            margin: 0;
+            overflow-x: hidden;
         }
-        50% {
-          transform: translateX(100%);
-        }
-        100% {
-          transform: translateX(-100%);
-        }
-      }
 
-      @keyframes speedLine {
-        0% {
-          background-position: 0% 0%;
+        html.light body {
+            background: var(--background-light);
+            color: var(--text-light);
         }
-        100% {
-          background-position: 100% 0%;
-        }
-      }
 
-      /* Responsive Design */
-      @media (max-width: 768px) {
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            width: 100%;
+            background: linear-gradient(145deg, #222222, #333333);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        html.light header {
+            background: linear-gradient(145deg, #e0e0e0, #f0f0f0);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 10px 15px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+            margin: 0 10px;
+        }
+
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #333;
+            transition: .4s;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 5px;
+        }
+
+        html.light .slider {
+            background-color: #ccc;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+
+        .slider .sun, .slider .moon {
+            color: #ffffff;
+            font-size: 14px;
+        }
+
+        /* Enhanced animations */
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes slideInFromRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes glowPulse {
+            0% {
+                box-shadow: 0 0 5px rgba(255, 51, 0, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(255, 51, 0, 0.5);
+            }
+            100% {
+                box-shadow: 0 0 5px rgba(255, 51, 0, 0.5);
+            }
+        }
+
+        @keyframes borderGlow {
+            0% {
+                border-color: var(--primary-color);
+            }
+            50% {
+                border-color: var(--secondary-color);
+            }
+            100% {
+                border-color: var(--primary-color);
+            }
+        }
+
+        /* Enhanced main content styling */
+        main {
+            animation: fadeInScale 0.6s ease-out;
+            background: linear-gradient(145deg, #222222, #333333);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        main::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--primary-color));
+            animation: borderGlow 3s infinite;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 15px;
+            position: relative;
+            color: var(--primary-color);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+        }
+
+        /* Enhanced form styling */
         #profile-form {
-          grid-template-columns: 1fr;
+            display: grid;
+            gap: 1.5rem;
+            padding: 20px;
         }
 
-        #services,
-        button,
-        #error-message,
+        .form-group {
+            animation: slideInFromRight 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; }
+        .form-group:nth-child(4) { animation-delay: 0.4s; }
+        .form-group:nth-child(5) { animation-delay: 0.5s; }
+        .form-group:nth-child(6) { animation-delay: 0.6s; }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-dark);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 15px rgba(255, 51, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-dark);
+            transition: color 0.3s ease;
+        }
+
+        input:focus + label,
+        textarea:focus + label {
+            color: var(--primary-color);
+        }
+
+        /* Enhanced services section */
+        #services {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            transform-origin: top;
+        }
+
+        #services.visible {
+            animation: fadeInScale 0.4s ease-out;
+        }
+
+        #services:hover {
+            background: rgba(255, 51, 0, 0.1);
+        }
+
+        .service-option {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .service-option:hover {
+            background: rgba(255, 51, 0, 0.1);
+        }
+
+        /* Enhanced button styling */
+        button[type="submit"] {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 51, 0, 0.3);
+        }
+
+        button[type="submit"]::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        button[type="submit"]:hover::before {
+            left: 100%;
+        }
+
+        /* Enhanced message styling */
+        #success-message,
+        #error-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            animation: fadeInScale 0.4s ease-out;
+        }
+
         #success-message {
-          grid-column: span 1;
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid rgba(0, 255, 0, 0.2);
+            color: #00ff00;
         }
 
-        nav ul {
-          height: auto;
-          flex-direction: column;
+        #error-message {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid rgba(255, 0, 0, 0.2);
+            color: #ff0000;
         }
 
-        nav li {
-          width: 100%;
+        /* Responsive enhancements */
+        @media (max-width: 1200px) {
+            .container {
+                padding: 0 15px;
+            }
         }
 
-        nav a {
-          height: 50px;
-          justify-content: center;
+        @media (max-width: 992px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            #profile-form {
+                gap: 1rem;
+            }
         }
 
-        #logout {
-          margin-left: 0;
-        }
-      }
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: center;
+            }
 
-      @media (max-width: 480px) {
-        .profile-container {
-          padding: 1.5rem;
-        }
+            .nav-buttons {
+                margin-top: 10px;
+            }
 
-        h1 {
-          font-size: 1.5rem;
-        }
+            h1 {
+                font-size: 2rem;
+            }
 
-        #profile-form input,
-        #profile-form textarea,
-        button {
-          font-size: 0.9rem;
-          padding: 10px;
-        }
+            main {
+                padding: 15px;
+            }
 
-        #profile-form label {
-          font-size: 0.8rem;
-        }
-      }
+            .form-group {
+                animation-delay: 0.1s !important;
+            }
 
-      @media (min-width: 1200px) {
-        .profile-container {
-          max-width: 900px;
+            button[type="submit"] {
+                width: 100%;
+            }
         }
 
-        h1 {
-          font-size: 2.2rem;
+        @media (max-width: 576px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .nav-buttons button {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+
+            #services {
+                padding: 15px;
+            }
         }
 
-        #profile-form input,
-        #profile-form textarea,
-        button {
-          font-size: 1.1rem;
+        @media (max-width: 400px) {
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            input[type="text"],
+            input[type="email"],
+            input[type="date"],
+            textarea {
+                font-size: 0.9rem;
+            }
         }
-      }
+
+        /* Custom checkbox styling */
+        .checkbox-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            cursor: pointer;
+            padding: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .checkbox-wrapper .checkmark {
+            position: relative;
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 51, 0, 0.5);
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-wrapper:hover .checkmark {
+            background: rgba(255, 51, 0, 0.1);
+            transform: scale(1.05);
+        }
+
+        .checkbox-wrapper input[type="checkbox"]:checked ~ .checkmark {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .checkbox-wrapper .checkmark:after {
+            content: '';
+            position: absolute;
+            display: none;
+            left: 7px;
+            top: 3px;
+            width: 6px;
+            height: 12px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .checkbox-wrapper input[type="checkbox"]:checked ~ .checkmark:after {
+            display: block;
+            animation: checkmark 0.2s ease-in-out forwards;
+        }
+
+        @keyframes checkmark {
+            0% {
+                opacity: 0;
+                transform: rotate(45deg) scale(0);
+            }
+            100% {
+                opacity: 1;
+                transform: rotate(45deg) scale(1);
+            }
+        }
+
+        /* Services section enhancement */
+        #services {
+            background: linear-gradient(145deg, rgba(34, 34, 34, 0.9), rgba(51, 51, 51, 0.9));
+            border: 1px solid rgba(255, 51, 0, 0.2);
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 25px;
+        }
+
+        #services label:first-child {
+            font-size: 1.1em;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .service-option {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .service-option:hover {
+            background: rgba(255, 51, 0, 0.1);
+            transform: translateX(5px);
+        }
+
+        html.light .checkbox-wrapper .checkmark {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(255, 51, 0, 0.3);
+        }
+
+        html.light #services {
+            background: linear-gradient(145deg, rgba(240, 240, 240, 0.9), rgba(250, 250, 250, 0.9));
+            border: 1px solid rgba(255, 51, 0, 0.2);
+        }
     </style>
-  </head>
-  <body>
-    <header>
-      <nav>
-        <ul>
-          <li><a href="/index.html">Головна</a></li>
-          <li><a href="/profile.html">Мій профіль</a></li>
-          <li><a href="#" id="logout">Вийти</a></li>
-        </ul>
-      </nav>
-    </header>
-  
-    <main>
-      <section class="profile-container">
-        <h1>Мій профіль</h1>
-  
-        <!-- Форма для оновлення профілю -->
-        <form id="profile-form">
-          <label for="first_name">Ім'я:</label>
-          <input type="text" id="first_name" name="first_name" required />
-  
-          <label for="last_name">Призвище:</label>
-          <input type="text" id="last_name" name="last_name" required />
-  
-          <label for="email">Електронна пошта:</label>
-          <input type="email" id="email" name="email" required />
-  
-          <label for="phone">Телефон:</label>
-          <input type="text" id="phone" name="phone" required />
-  
-          <label for="address">Адреса:</label>
-          <textarea id="address" name="address" required></textarea>
-  
-          <label for="date_of_birth">Дата народження:</label>
-          <input type="date" id="date_of_birth" name="date_of_birth" required />
-  
-          <!-- Роль: майстер чи користувач -->
-          <label for="role_master">Я майстер:</label>
-          <input type="checkbox" id="role_master" name="role_master" />
-  
-          <!-- Послуги для майстра -->
-          <div id="services" style="display: none">
-            <label>Оберіть послугу:</label>
-            <div>
-              <input
-                type="checkbox"
-                id="service1"
-                name="services"
-                value="Робота з фотографіями"
-              />
-              <label for="service1">Робота з фотографіями</label>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="logo">АвтоЛікар24.7</a>
+            <div class="nav-buttons">
+                <button onclick="window.location.href='index.html'">Головна</button>
+                <button onclick="window.location.href='auth.html'">Реєстрація та Авторизація</button>
+                <button onclick="window.location.href='admin.html'">Адмін-панель</button>
+                <button id="logout">Вийти</button>
             </div>
-            <div>
-              <input
-                type="checkbox"
-                id="service2"
-                name="services"
-                value="Розробка веб-сайтів"
-              />
-              <label for="service2">Розробка веб-сайтів</label>
+            <div class="theme-switch-container">
+                <label class="theme-switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider">
+                        <span class="moon">🌙</span>
+                        <span class="sun">☀️</span>
+                    </span>
+                </label>
             </div>
-            <div>
-              <input
-                type="checkbox"
-                id="service3"
-                name="services"
-                value="Дизайн та графіка"
-              />
-              <label for="service3">Дизайн та графіка</label>
-            </div>
-          </div>
-  
-          <button type="submit">Оновити профіль</button>
-        </form>
-  
-        <div id="error-message" style="display: none; color: red"></div>
-        <div id="success-message" style="display: none; color: green"></div>
-      </section>
-    </main>
-  
-    <footer>
-      <p>© 2025 АвтоЛікар24.7 Всі права захищені.</p>
-    </footer>
-  
+        </header>
+
+        <main>
+            <h1>Мій профіль</h1>
+            <form id="profile-form">
+                <div class="form-group">
+                    <label for="first_name">Ім'я:</label>
+                    <input type="text" id="first_name" name="first_name" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="last_name">Прізвище:</label>
+                    <input type="text" id="last_name" name="last_name" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Електронна пошта:</label>
+                    <input type="email" id="email" name="email" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Телефон:</label>
+                    <input type="text" id="phone" name="phone" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Адреса:</label>
+                    <textarea id="address" name="address" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="date_of_birth">Дата народження:</label>
+                    <input type="date" id="date_of_birth" name="date_of_birth" required />
+                </div>
+
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" id="role_master" name="role_master" />
+                    <span class="checkmark"></span>
+                    Я майстер
+                </label>
+
+                <div id="services" style="display: none">
+                  <label>Оберіть послугу:</label>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Діагностика двигуна"><span class="checkmark"></span>Діагностика двигуна</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Ремонт трансмісії"><span class="checkmark"></span>Ремонт трансмісії</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Заміна гальмівних дисків"><span class="checkmark"></span>Заміна гальмівних дисків</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Ремонт кондиціонера"><span class="checkmark"></span>Ремонт кондиціонера</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Заміна масла"><span class="checkmark"></span>Заміна масла</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Ремонт підвіски"><span class="checkmark"></span>Ремонт підвіски</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Заміна свічок запалювання"><span class="checkmark"></span>Заміна свічок запалювання</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Покраска автомобіля"><span class="checkmark"></span>Покраска автомобіля</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Ремонт електричних систем"><span class="checkmark"></span>Ремонт електричних систем</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Охолодження двигуна"><span class="checkmark"></span>Охолодження двигуна</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Заміна фільтру"><span class="checkmark"></span>Заміна фільтру</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Ремонт стартера"><span class="checkmark"></span>Ремонт стартера</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Ремонт електродвигуна"><span class="checkmark"></span>Ремонт електродвигуна</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Перевірка системи живлення"><span class="checkmark"></span>Перевірка системи живлення</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Проблеми з акумулятором"><span class="checkmark"></span>Проблеми з акумулятором</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Ремонт вихлопної системи"><span class="checkmark"></span>Ремонт вихлопної системи</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Заміна ременя"><span class="checkmark"></span>Заміна ременя</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Перевірка системи охолодження"><span class="checkmark"></span>Перевірка системи охолодження</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Ремонт підшипників"><span class="checkmark"></span>Ремонт підшипників</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Ремонт системи підйому"><span class="checkmark"></span>Ремонт системи підйому</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Ремонт рульового управління"><span class="checkmark"></span>Ремонт рульового управління</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Заміна гальмівної рідини"><span class="checkmark"></span>Заміна гальмівної рідини</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Ремонт паливної системи"><span class="checkmark"></span>Ремонт паливної системи</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Заміна амортизаторів"><span class="checkmark"></span>Заміна амортизаторів</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Ремонт системи запалювання"><span class="checkmark"></span>Ремонт системи запалювання</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Проблеми з трансмісією"><span class="checkmark"></span>Проблеми з трансмісією</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Ремонт кузова"><span class="checkmark"></span>Ремонт кузова</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Ремонт фар"><span class="checkmark"></span>Ремонт фар</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Заміна гальмівних колодок"><span class="checkmark"></span>Заміна гальмівних колодок</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Ремонт двигуна"><span class="checkmark"></span>Ремонт двигуна</label></div>
+                  <div class="service-option"><label class="checkbox-wrapper"><input type="checkbox" name="services" value="Ремонт системи випуску газів"><span class="checkmark"></span>Ремонт системи випуску газів</label></div>
+              </div>
+                <button type="submit">Оновити профіль</button>
+            </form>
+
+            <div id="error-message" style="display: none;"></div>
+            <div id="success-message" style="display: none;"></div>
+        </main>
+    </div>
+
     <script>
-      // Функція для отримання ID користувача з localStorage або URL
-      function getUserId() {
-        // Спочатку перевіряємо localStorage
-        const userId = localStorage.getItem('userId');
-        if (userId) {
-          return userId;
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+        
+        // Check for saved theme preference
+        if (localStorage.getItem('theme') === 'light') {
+            htmlElement.classList.remove('dark');
+            htmlElement.classList.add('light');
+            themeToggle.checked = true;
         }
         
-        // Якщо немає в localStorage, перевіряємо URL параметри
-        const urlParams = new URLSearchParams(window.location.search);
-        const urlUserId = urlParams.get('userId');
-        
-        if (urlUserId) {
-          // Зберігаємо ID в localStorage для майбутнього використання
-          localStorage.setItem('userId', urlUserId);
-          return urlUserId;
-        }
-        
-        // Якщо ID не знайдено, перенаправляємо на сторінку авторизації
-        alert('Необхідно авторизуватися');
-        window.location.href = '/';
-        return null;
-      }
+        // Toggle theme when switch is clicked
+        themeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                htmlElement.classList.remove('dark');
+                htmlElement.classList.add('light');
+                localStorage.setItem('theme', 'light');
+            } else {
+                htmlElement.classList.remove('light');
+                htmlElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
 
-      // Функція для завантаження профілю користувача
-      async function loadUserProfile() {
-        const userId = getUserId();
-        if (!userId) return;
-        
-        try {
-          const response = await fetch(`/profile/${userId}`);
-          
-          if (!response.ok) {
-            throw new Error('Не вдалося завантажити профіль');
-          }
-          
-          const data = await response.json();
-          
-          if (data.profile) {
-            // Заповнюємо форму даними профілю
-            document.getElementById("first_name").value = data.profile.first_name || '';
-            document.getElementById("last_name").value = data.profile.last_name || '';
-            document.getElementById("email").value = data.profile.email || '';
-            document.getElementById("phone").value = data.profile.phone || '';
-            document.getElementById("address").value = data.profile.address || '';
-            
-            // Форматуємо дату народження для input type="date"
-            if (data.profile.date_of_birth) {
-              const date = new Date(data.profile.date_of_birth);
-              const formattedDate = date.toISOString().split('T')[0];
-              document.getElementById("date_of_birth").value = formattedDate;
+        // Function to get user ID
+        function getUserId() {
+            const userId = localStorage.getItem('userId');
+            if (userId) {
+                return userId;
             }
             
-            document.getElementById("role_master").checked = data.profile.role_master || false;
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlUserId = urlParams.get('userId');
             
-            // Показуємо блок послуг, якщо користувач є майстром
-            if (data.profile.role_master) {
-              document.getElementById("services").style.display = "block";
-              
-              // Завантажуємо послуги користувача
-              loadUserServices(userId);
+            if (urlUserId) {
+                localStorage.setItem('userId', urlUserId);
+                return urlUserId;
             }
-          }
-        } catch (error) {
-          showError(error.message);
-        }
-      }
-      
-      // Функція для завантаження послуг користувача
-      async function loadUserServices(userId) {
-        try {
-          const response = await fetch(`/services/${userId}`);
-          
-          if (!response.ok) {
-            throw new Error('Не вдалося завантажити послуги');
-          }
-          
-          const data = await response.json();
-          
-          if (data.services && data.services.length > 0) {
-            // Очищаємо всі чекбокси
-            document.querySelectorAll('#services input[type="checkbox"]').forEach(checkbox => {
-              checkbox.checked = false;
-            });
             
-            // Відмічаємо послуги користувача
-            data.services.forEach(service => {
-              // Шукаємо чекбокс з відповідним значенням
-              const checkbox = Array.from(document.querySelectorAll('#services input[type="checkbox"]'))
-                .find(cb => cb.value === service.service_name);
-              
-              if (checkbox) {
-                checkbox.checked = true;
-              }
-            });
-          }
-        } catch (error) {
-          showError(error.message);
+            alert('Необхідно авторизуватися');
+            window.location.href = '/auth.html';
+            return null;
         }
-      }
-      
-      // Функція для відображення помилки
-      function showError(message) {
-        const errorElement = document.getElementById('error-message');
-        errorElement.textContent = message;
-        errorElement.style.display = 'block';
-        
-        // Ховаємо повідомлення через 5 секунд
-        setTimeout(() => {
-          errorElement.style.display = 'none';
-        }, 5000);
-      }
-      
-      // Функція для відображення успішного повідомлення
-      function showSuccess(message) {
-        const successElement = document.getElementById('success-message');
-        successElement.textContent = message;
-        successElement.style.display = 'block';
-        
-        // Ховаємо повідомлення через 5 секунд
-        setTimeout(() => {
-          successElement.style.display = 'none';
-        }, 5000);
-      }
 
-      // Обробник події відправки форми
-      document.getElementById("profile-form").addEventListener("submit", async function (event) {
-        event.preventDefault();
-        
-        const userId = getUserId();
-        if (!userId) return;
-        
-        // Збираємо дані форми
-        const formData = {
-          first_name: document.getElementById("first_name").value,
-          last_name: document.getElementById("last_name").value,
-          email: document.getElementById("email").value,
-          phone: document.getElementById("phone").value,
-          address: document.getElementById("address").value,
-          date_of_birth: document.getElementById("date_of_birth").value,
-          role_master: document.getElementById("role_master").checked
-        };
-        
-        try {
-          // Оновлюємо профіль
-          const profileResponse = await fetch(`/profile/${userId}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formData)
-          });
-          
-          if (!profileResponse.ok) {
-            const errorData = await profileResponse.json();
-            throw new Error(errorData.message || 'Не вдалося оновити профіль');
-          }
-          
-          // Якщо користувач є майстром, оновлюємо послуги
-          if (formData.role_master) {
-            // Отримуємо вибрані послуги
-            const selectedServices = Array.from(
-              document.querySelectorAll('#services input[type="checkbox"]:checked')
-            ).map(checkbox => checkbox.value);
+        // Function to load user profile
+        async function loadUserProfile() {
+            const userId = getUserId();
+            if (!userId) return;
             
-            // Спочатку отримуємо поточні послуги
-            const servicesResponse = await fetch(`/services/${userId}`);
-            const servicesData = await servicesResponse.json();
+            try {
+                const response = await fetch(`/profile/${userId}`);
+                
+                if (!response.ok) {
+                    throw new Error('Не вдалося завантажити профіль');
+                }
+                
+                const data = await response.json();
+                
+                if (data.profile) {
+                    document.getElementById("first_name").value = data.profile.first_name || '';
+                    document.getElementById("last_name").value = data.profile.last_name || '';
+                    document.getElementById("email").value = data.profile.email || '';
+                    document.getElementById("phone").value = data.profile.phone || '';
+                    document.getElementById("address").value = data.profile.address || '';
+                    
+                    if (data.profile.date_of_birth) {
+                        const date = new Date(data.profile.date_of_birth);
+                        const formattedDate = date.toISOString().split('T')[0];
+                        document.getElementById("date_of_birth").value = formattedDate;
+                    }
+                    
+                    document.getElementById("role_master").checked = data.profile.role_master || false;
+                    
+                    if (data.profile.role_master) {
+                        document.getElementById("services").style.display = "block";
+                        loadUserServices(userId);
+                    }
+                }
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+        
+        // Function to load user services
+        async function loadUserServices(userId) {
+            try {
+                const response = await fetch(`/services/${userId}`);
+                
+                if (!response.ok) {
+                    throw new Error('Не вдалося завантажити послуги');
+                }
+                
+                const data = await response.json();
+                
+                if (data.services && data.services.length > 0) {
+                    document.querySelectorAll('#services input[type="checkbox"]').forEach(checkbox => {
+                        checkbox.checked = false;
+                    });
+                    
+                    data.services.forEach(service => {
+                        const checkbox = Array.from(document.querySelectorAll('#services input[type="checkbox"]'))
+                            .find(cb => cb.value === service.service_name);
+                        
+                        if (checkbox) {
+                            checkbox.checked = true;
+                        }
+                    });
+                }
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+        
+        // Function to show error message
+        function showError(message) {
+            const errorElement = document.getElementById('error-message');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
             
-            // Видаляємо всі поточні послуги
-            if (servicesData.services && servicesData.services.length > 0) {
-              for (const service of servicesData.services) {
-                await fetch(`/services/${service.id}`, {
-                  method: "DELETE"
+            setTimeout(() => {
+                errorElement.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Function to show success message
+        function showSuccess(message) {
+            const successElement = document.getElementById('success-message');
+            successElement.textContent = message;
+            successElement.style.display = 'block';
+            
+            setTimeout(() => {
+                successElement.style.display = 'none';
+            }, 5000);
+        }
+
+        // Form submission handler
+        document.getElementById("profile-form").addEventListener("submit", async function (event) {
+            event.preventDefault();
+            
+            const userId = getUserId();
+            if (!userId) return;
+            
+            const formData = {
+                first_name: document.getElementById("first_name").value,
+                last_name: document.getElementById("last_name").value,
+                email: document.getElementById("email").value,
+                phone: document.getElementById("phone").value,
+                address: document.getElementById("address").value,
+                date_of_birth: document.getElementById("date_of_birth").value,
+                role_master: document.getElementById("role_master").checked
+            };
+            
+            try {
+                const profileResponse = await fetch(`/profile/${userId}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData)
                 });
-              }
+                
+                if (!profileResponse.ok) {
+                    const errorData = await profileResponse.json();
+                    throw new Error(errorData.message || 'Не вдалося оновити профіль');
+                }
+                
+                if (formData.role_master) {
+                    const selectedServices = Array.from(
+                        document.querySelectorAll('#services input[type="checkbox"]:checked')
+                    ).map(checkbox => checkbox.value);
+                    
+                    const servicesResponse = await fetch(`/services/${userId}`);
+                    const servicesData = await servicesResponse.json();
+                    
+                    if (servicesData.services && servicesData.services.length > 0) {
+                        for (const service of servicesData.services) {
+                            await fetch(`/services/${service.id}`, {
+                                method: "DELETE"
+                            });
+                        }
+                    }
+                    
+                    for (const serviceName of selectedServices) {
+                        await fetch(`/services/${userId}`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ service_name: serviceName })
+                        });
+                    }
+                }
+                
+                showSuccess('Профіль успішно оновлено!');
+            } catch (error) {
+                showError(error.message);
             }
+        });
+
+        // Add animation for services toggle
+        document.getElementById("role_master").addEventListener("change", function () {
+            const servicesDiv = document.getElementById("services");
+            if (this.checked) {
+                servicesDiv.style.display = "block";
+                servicesDiv.classList.add("visible");
+            } else {
+                servicesDiv.classList.remove("visible");
+                setTimeout(() => {
+                    servicesDiv.style.display = "none";
+                }, 300);
+            }
+        });
+
+        // Add animation for form submission feedback
+        function showSuccess(message) {
+            const successElement = document.getElementById('success-message');
+            successElement.textContent = message;
+            successElement.style.display = 'block';
+            successElement.style.animation = 'fadeInScale 0.4s ease-out';
             
-            // Додаємо нові послуги
-            for (const serviceName of selectedServices) {
-              await fetch(`/services/${userId}`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ service_name: serviceName })
-              });
-            }
-          }
-          
-          showSuccess('Профіль успішно оновлено!');
-        } catch (error) {
-          showError(error.message);
+            setTimeout(() => {
+                successElement.style.animation = 'fadeInScale 0.4s ease-out reverse';
+                setTimeout(() => {
+                    successElement.style.display = 'none';
+                }, 400);
+            }, 5000);
         }
-      });
 
-      // Обробка зміни ролі (Майстер/Користувач)
-      document.getElementById("role_master").addEventListener("change", function () {
-        if (this.checked) {
-          document.getElementById("services").style.display = "block";
-        } else {
-          document.getElementById("services").style.display = "none";
+        function showError(message) {
+            const errorElement = document.getElementById('error-message');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            errorElement.style.animation = 'fadeInScale 0.4s ease-out';
+            
+            setTimeout(() => {
+                errorElement.style.animation = 'fadeInScale 0.4s ease-out reverse';
+                setTimeout(() => {
+                    errorElement.style.display = 'none';
+                }, 400);
+            }, 5000);
         }
-      });
 
-      // Вихід із профілю
-      document.getElementById("logout").addEventListener("click", function (event) {
-        event.preventDefault();
-        // Очищаємо дані користувача
-        localStorage.removeItem('userId');
-        // Перенаправляємо на сторінку авторизації
-        window.location.href = "/";
-      });
+        // Add input animation handlers
+        document.querySelectorAll('input, textarea').forEach(element => {
+            element.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'translateY(-2px)';
+            });
 
-      // Завантажуємо профіль при завантаженні сторінки
-      document.addEventListener('DOMContentLoaded', loadUserProfile);
+            element.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Logout handler
+        document.getElementById("logout").addEventListener("click", function (event) {
+            event.preventDefault();
+            localStorage.removeItem('userId');
+            window.location.href = "/auth.html";
+        });
+
+        // Load profile on page load
+        document.addEventListener('DOMContentLoaded', loadUserProfile);
     </script>
-  </body>
+</body>
 </html>
+

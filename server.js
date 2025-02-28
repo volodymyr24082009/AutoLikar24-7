@@ -305,6 +305,33 @@ app.delete('/services/:serviceId', async (req, res) => {
   }
 });
 
+// Отримання списку всіх користувачів та майстрів
+app.get('/admin/users', async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT u.id, u.username, up.role_master, up.first_name, up.last_name, up.email
+      FROM users u
+      LEFT JOIN user_profile up ON u.id = up.user_id
+    `);
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Помилка при отриманні списку користувачів:', err);
+    res.status(500).json({ message: 'Помилка сервера', error: err.message });
+  }
+});
+
+// Видалення користувача
+app.delete('/admin/users/:userId', async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    await pool.query('DELETE FROM users WHERE id = $1', [userId]);
+    res.json({ message: 'Користувача успішно видалено' });
+  } catch (err) {
+    console.error('Помилка при видаленні користувача:', err);
+    res.status(500).json({ message: 'Помилка сервера', error: err.message });
+  }
+});
+
 // Запуск сервера
 app.listen(port, () => {
   console.log(`Сервер запущено на http://localhost:${port}`);

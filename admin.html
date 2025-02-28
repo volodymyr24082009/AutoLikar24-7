@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="uk" class="dark">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Реєстрація та Логін - АвтоЛікар24.7</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Адмін-панель - АвтоЛікар24.7</title>
     <style>
         :root {
             --background-dark: #1a1a1a;
@@ -167,116 +167,53 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
         }
 
         h1 {
-            width: 100%;
-            text-align: center;
             font-size: 2rem;
             margin-bottom: 20px;
+            text-align: center;
             color: var(--primary-color);
         }
 
-        form {
-            flex: 1;
-            min-width: 300px;
-            max-width: 400px;
-            background: linear-gradient(45deg, rgba(40, 40, 40, 0.95), rgba(30, 30, 30, 0.95));
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: linear-gradient(145deg, #222222, #333333);
+            border-radius: 10px;
             overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
-        form:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 10px,
-                rgba(0, 0, 0, 0.1) 10px,
-                rgba(0, 0, 0, 0.1) 20px
-            );
-            z-index: -1;
-        }
-
-        html.light form {
-            background: linear-gradient(45deg, rgba(240, 240, 240, 0.95), rgba(250, 250, 250, 0.95));
+        html.light table {
+            background: linear-gradient(145deg, #e0e0e0, #f0f0f0);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
-        form h2 {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            color: var(--primary-color);
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        html.light th, html.light td {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
             text-transform: uppercase;
             letter-spacing: 1px;
+            font-weight: 600;
         }
 
-        label {
-            display: block;
-            margin-bottom: 15px;
-            color: var(--text-dark);
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
         }
 
-        html.light label {
-            color: var(--text-light);
-        }
-
-        input {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: none;
-            border-radius: 5px;
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-dark);
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        html.light input {
-            background: rgba(0, 0, 0, 0.1);
-            color: var(--text-light);
-        }
-
-        input:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px var(--primary-color);
-        }
-
-        form button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 20px;
-            font-size: 1rem;
-        }
-
-        #registerForm {
-            border-left: 4px solid var(--primary-color);
-        }
-
-        #loginForm {
-            border-left: 4px solid var(--accent-color);
-        }
-
-        #loginForm button {
-            background: linear-gradient(90deg, var(--accent-color), #0056b3);
+        html.light tr:hover {
+            background-color: rgba(0, 0, 0, 0.05);
         }
 
         @media (max-width: 768px) {
@@ -300,13 +237,12 @@
                 margin-top: 10px;
             }
 
-            main {
-                flex-direction: column;
-                align-items: center;
+            table {
+                font-size: 14px;
             }
 
-            form {
-                width: 100%;
+            th, td {
+                padding: 8px 10px;
             }
         }
 
@@ -332,12 +268,12 @@
                 font-size: 1.5rem;
             }
 
-            form {
-                padding: 20px;
+            table {
+                font-size: 12px;
             }
 
-            form h2 {
-                font-size: 1.2rem;
+            th, td {
+                padding: 6px 8px;
             }
         }
     </style>
@@ -349,7 +285,7 @@
             <div class="nav-buttons">
                 <button onclick="window.location.href='index.html'">Головна</button>
                 <button onclick="window.location.href='profile.html'">Профіль</button>
-                <button onclick="window.location.href='admin.html'">Адмін-панель</button>
+                <button onclick="window.location.href='auth.html'">Реєстрація та Авторизація</button>
             </div>
             <div class="theme-switch-container">
                 <label class="theme-switch">
@@ -363,33 +299,23 @@
         </header>
 
         <main>
-            <h1>Реєстрація та Логін</h1>
-            
-            <form id="registerForm">
-                <h2>Реєстрація</h2>
-                <label>
-                    ІМ'Я КОРИСТУВАЧА:
-                    <input type="text" id="regUsername" required placeholder="volod4ymy6r@gmail.com" />
-                </label>
-                <label>
-                    ПАРОЛЬ:
-                    <input type="password" id="regPassword" required placeholder="••••••" />
-                </label>
-                <button type="submit">ЗАРЕЄСТРУВАТИСЯ</button>
-            </form>
-
-            <form id="loginForm">
-                <h2>Логін</h2>
-                <label>
-                    ІМ'Я КОРИСТУВАЧА:
-                    <input type="text" id="loginUsername" required placeholder="volod4ymy6r@gmail.com" />
-                </label>
-                <label>
-                    ПАРОЛЬ:
-                    <input type="password" id="loginPassword" required placeholder="••••••" />
-                </label>
-                <button type="submit">УВІЙТИ</button>
-            </form>
+            <h1>Адмін-панель</h1>
+            <table id="usersTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Ім'я користувача</th>
+                        <th>Роль</th>
+                        <th>Ім'я</th>
+                        <th>Прізвище</th>
+                        <th>Email</th>
+                        <th>Дії</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Table content will be dynamically populated -->
+                </tbody>
+            </table>
         </main>
     </div>
 
@@ -417,47 +343,45 @@
             }
         });
 
-        // Form handling
-        function showError(message) {
-            alert(message);
+        // Load and display users
+        function loadUsers() {
+            fetch('/admin/users')
+                .then(response => response.json())
+                .then(users => {
+                    const tableBody = document.querySelector('#usersTable tbody');
+                    tableBody.innerHTML = '';
+                    users.forEach(user => {
+                        const row = `
+                            <tr>
+                                <td>${user.id}</td>
+                                <td>${user.username}</td>
+                                <td>${user.role_master ? 'Майстер' : 'Користувач'}</td>
+                                <td>${user.first_name || ''}</td>
+                                <td>${user.last_name || ''}</td>
+                                <td>${user.email || ''}</td>
+                                <td><button onclick="deleteUser(${user.id})">Видалити</button></td>
+                            </tr>
+                        `;
+                        tableBody.innerHTML += row;
+                    });
+                })
+                .catch(error => console.error('Помилка при завантаженні користувачів:', error));
         }
 
-        async function handleFormSubmit(endpoint, username, password) {
-            try {
-                const response = await fetch(endpoint, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ username, password }),
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    if (data.userId) {
-                        localStorage.setItem('userId', data.userId);
-                    }
-                    window.location.href = data.redirect;
-                } else {
-                    showError(data.message);
-                }
-            } catch (error) {
-                showError("Помилка з'єднання з сервером");
+        function deleteUser(userId) {
+            if (confirm('Ви впевнені, що хочете видалити цього користувача?')) {
+                fetch(`/admin/users/${userId}`, { method: 'DELETE' })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message);
+                        loadUsers();
+                    })
+                    .catch(error => console.error('Помилка при видаленні користувача:', error));
             }
         }
 
-        document.getElementById("registerForm").addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const username = document.getElementById("regUsername").value;
-            const password = document.getElementById("regPassword").value;
-            await handleFormSubmit("/register", username, password);
-        });
-
-        document.getElementById("loginForm").addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const username = document.getElementById("loginUsername").value;
-            const password = document.getElementById("loginPassword").value;
-            await handleFormSubmit("/login", username, password);
-        });
+        // Load users when page loads
+        loadUsers();
     </script>
 </body>
 </html>

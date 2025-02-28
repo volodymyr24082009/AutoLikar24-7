@@ -1,57 +1,272 @@
 <!DOCTYPE html>
-<html lang="uk">
-  <head>
+<html lang="uk" class="dark">
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>АвтоЛікар24.7</title>
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-      }
+        :root {
+            --background-dark: #1a1a1a;
+            --background-light: #f5f5f5;
+            --text-dark: #fff;
+            --text-light: #333;
+            --primary-color: #ff3300;
+            --secondary-color: #ff6600;
+            --accent-color: #007bff;
+        }
 
-      header {
-        display: flex;
-        justify-content: flex-end;
-        padding: 10px;
-        background-color: #333;
-      }
+        html {
+            scroll-behavior: smooth;
+            height: 100%;
+        }
 
-      button {
-        padding: 10px 20px;
-        border: none;
-        background-color: #f8b400;
-        color: white;
-        cursor: pointer;
-        font-size: 16px;
-        border-radius: 5px;
-        margin-left: 10px; /* Додаємо відступ між кнопками */
-      }
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            background: var(--background-dark);
+            background-image: radial-gradient(rgba(255, 0, 0, 0.1) 1px, transparent 1px),
+                radial-gradient(rgba(255, 0, 0, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            background-position: 0 0, 25px 25px;
+            padding: 20px;
+            color: var(--text-dark);
+            font-family: 'Roboto', Arial, sans-serif;
+            transition: background 0.3s ease, color 0.3s ease;
+            margin: 0;
+            overflow-x: hidden;
+        }
 
-      button:hover {
-        background-color: #d48c00;
-      }
+        html.light body {
+            background: var(--background-light);
+            color: var(--text-light);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            width: 100%;
+            background: linear-gradient(145deg, #222222, #333333);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        html.light header {
+            background: linear-gradient(145deg, #e0e0e0, #f0f0f0);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 10px 15px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+            margin: 0 10px;
+        }
+
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #333;
+            transition: .4s;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 5px;
+        }
+
+        html.light .slider {
+            background-color: #ccc;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+
+        .slider .sun, .slider .moon {
+            color: #ffffff;
+            font-size: 14px;
+        }
+
+        main {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .theme-switch-container {
+                display: flex;
+                justify-content: center;
+                margin-top: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            header {
+                padding: 10px;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            button {
+                font-size: 0.8rem;
+                padding: 8px 12px;
+            }
+        }
     </style>
-  </head>
-  <body>
-    <header>
-      <button id="profileBtn">Профіль</button>
-      <button id="registerBtn">Реєстрація та Авторизація</button>
-    </header>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="logo">АвтоЛікар24.7</a>
+            <div class="nav-buttons">
+                <button id="profileBtn">Профіль</button>
+                <button id="registerBtn">Реєстрація та Авторизація</button>
+                <button id="adminBtn">Адмін-панель</button>
+            </div>
+            <div class="theme-switch-container">
+                <label class="theme-switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider">
+                        <span class="moon">🌙</span>
+                        <span class="sun">☀️</span>
+                    </span>
+                </label>
+            </div>
+        </header>
+
+        <main>
+            <!-- Main content goes here -->
+            <h1>Ласкаво просимо до АвтоЛікар24.7</h1>
+            <p>Тут ви можете знайти найкращі послуги для вашого автомобіля.</p>
+        </main>
+    </div>
 
     <script>
-      document
-        .getElementById("profileBtn")
-        .addEventListener("click", function () {
-          window.location.href = "profile.html";
+        const themeToggle = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+        
+        // Check for saved theme preference
+        if (localStorage.getItem('theme') === 'light') {
+            htmlElement.classList.remove('dark');
+            htmlElement.classList.add('light');
+            themeToggle.checked = true;
+        }
+        
+        // Toggle theme when switch is clicked
+        themeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                htmlElement.classList.remove('dark');
+                htmlElement.classList.add('light');
+                localStorage.setItem('theme', 'light');
+            } else {
+                htmlElement.classList.remove('light');
+                htmlElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
         });
 
-      document
-        .getElementById("registerBtn")
-        .addEventListener("click", function () {
-          window.location.href = "auth.html"; // Замінив на правильний шлях
-        });
+        // Navigation buttons
+        document.getElementById("profileBtn").addEventListener("click", () => window.location.href = "profile.html");
+        document.getElementById("registerBtn").addEventListener("click", () => window.location.href = "auth.html");
+        document.getElementById("adminBtn").addEventListener("click", () => window.location.href = "admin.html");
     </script>
-  </body>
+</body>
 </html>
+
