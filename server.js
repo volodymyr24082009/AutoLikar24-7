@@ -40,7 +40,8 @@ const createTables = async () => {
       email VARCHAR(255),
       phone VARCHAR(15),
       address TEXT,
-      date_of_birth DATE
+      date_of_birth DATE,
+      role_master BOOLEAN DEFAULT FALSE
     );
   `;
 
@@ -52,24 +53,11 @@ const createTables = async () => {
     );
   `;
 
-  const addRoleMasterColumnQuery = `
-    DO $$ 
-    BEGIN 
-      IF NOT EXISTS (
-        SELECT FROM information_schema.columns 
-        WHERE table_name = 'user_profile' AND column_name = 'role_master'
-      ) THEN
-        ALTER TABLE user_profile ADD COLUMN role_master BOOLEAN DEFAULT FALSE;
-      END IF;
-    END $$;
-  `;
-
   try {
     await pool.query(userTableQuery);
     await pool.query(userProfileTableQuery);
     await pool.query(userServicesTableQuery);
-    await pool.query(addRoleMasterColumnQuery);
-    console.log('Таблиці створено або вже існують, колонку role_master додано (якщо її не було).');
+    console.log('Таблиці створено або вже існують.');
   } catch (err) {
     console.error('Помилка при створенні таблиць:', err);
   }
@@ -86,9 +74,6 @@ app.use(express.static(path.join(__dirname)));
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "auth.html"));
 });
-
-// Допоміжна функція для виконання запитів до бази даних
-const query = (text, params) => pool.query(text, params);
 
 // Middleware для JWT аутентифікації
 const authenticateToken = (req, res, next) => {
@@ -308,12 +293,19 @@ app.delete('/services/:serviceId', async (req, res) => {
 // Отримання списку всіх користувачів та майстрів
 app.get('/admin/users', async (req, res) => {
   try {
+    // Виправлений запит для отримання всіх користувачів з їх профілями
     const result = await pool.query(`
-      SELECT u.id, u.username, up.role_master, up.first_name, up.last_name, up.email
+      SELECT u.id, u.username, up.role_master, up.first_name, up.last_name, up.email, up.phone
       FROM users u
       LEFT JOIN user_profile up ON u.id = up.user_id
+      ORDER BY u.id ASC
     `);
-    res.json(result.rows);
+    
+    // Логування для відстеження результатів
+    console.log(`Отримано ${result.rows.length} користувачів з бази даних`);
+    
+    // Повертаємо результат
+    res.status(200).json(result.rows);
   } catch (err) {
     console.error('Помилка при отриманні списку користувачів:', err);
     res.status(500).json({ message: 'Помилка сервера', error: err.message });
@@ -324,8 +316,21 @@ app.get('/admin/users', async (req, res) => {
 app.delete('/admin/users/:userId', async (req, res) => {
   const userId = req.params.userId;
   try {
-    await pool.query('DELETE FROM users WHERE id = $1', [userId]);
-    res.json({ message: 'Користувача успішно видалено' });
+    // Спочатку видаляємо профіль користувача (каскадне видалення має працювати, але для впевненості)
+    await pool.query('DELETE FROM user_profile WHERE user_id = $1', [userId]);
+    
+    // Видаляємо послуги користувача
+    await pool.query('DELETE FROM user_services WHERE user_id = $1', [userId]);
+    
+    // Видаляємо самого користувача
+    const result = await pool.query('DELETE FROM users WHERE id = $1 RETURNING id', [userId]);
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Користувача не знайдено' });
+    }
+    
+    console.log(`Користувача з ID ${userId} успішно видалено.`);
+    res.status(200).json({ success: true, message: 'Користувача успішно видалено' });
   } catch (err) {
     console.error('Помилка при видаленні користувача:', err);
     res.status(500).json({ message: 'Помилка сервера', error: err.message });
