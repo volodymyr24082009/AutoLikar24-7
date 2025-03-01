@@ -346,40 +346,26 @@
         // Load and display users
         function loadUsers() {
             fetch('/admin/users')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    return response.json();
-                })
+                .then(response => response.json())
                 .then(users => {
-                    console.log('Отримані дані користувачів:', users); // Додаємо логування для відстеження
                     const tableBody = document.querySelector('#usersTable tbody');
                     tableBody.innerHTML = '';
-                    
-                    if (users && users.length > 0) {
-                        users.forEach(user => {
-                            const row = document.createElement('tr');
-                            row.innerHTML = `
-                                <td>${user.id || ''}</td>
-                                <td>${user.username || ''}</td>
+                    users.forEach(user => {
+                        const row = `
+                            <tr>
+                                <td>${user.id}</td>
+                                <td>${user.username}</td>
                                 <td>${user.role_master ? 'Майстер' : 'Користувач'}</td>
                                 <td>${user.first_name || ''}</td>
                                 <td>${user.last_name || ''}</td>
                                 <td>${user.email || ''}</td>
                                 <td><button onclick="deleteUser(${user.id})">Видалити</button></td>
-                            `;
-                            tableBody.appendChild(row);
-                        });
-                    } else {
-                        tableBody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Користувачів не знайдено</td></tr>';
-                    }
+                            </tr>
+                        `;
+                        tableBody.innerHTML += row;
+                    });
                 })
-                .catch(error => {
-                    console.error('Помилка при завантаженні користувачів:', error);
-                    const tableBody = document.querySelector('#usersTable tbody');
-                    tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: red;">Помилка завантаження: ${error.message}</td></tr>`;
-                });
+                .catch(error => console.error('Помилка при завантаженні користувачів:', error));
         }
 
         function deleteUser(userId) {
